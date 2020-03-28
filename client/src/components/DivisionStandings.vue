@@ -1,7 +1,8 @@
 <template>
   <div class="standings-container">
     <p class="error" v-if="error">{{ error }}</p>
-    <div>{{ standings }}</div>
+    <h1 class='standings-header'>Division Standings ({{ this.$props.currentSeasonData.currentSeasonString }})</h1>
+    <pre>{{ standings }}</pre>
   </div>
 </template>
 
@@ -10,6 +11,9 @@ import API from "../../config/api";
 
 export default {
   name: "DivisionStandings",
+  props: [
+    "currentSeasonData"
+  ],
   data() {
     return {
       error: "",

@@ -11,7 +11,14 @@ let asyncFetch = async (url = "") => {
 };
 
 module.exports = {
+    getCurrentSeason: async function () {
+        let data = await asyncFetch("seasons/current");
+
+        return {
+            currentSeasonString: `${data.seasons[0].seasonId.substring(0, 4)}-${data.seasons[0].seasonId.substring(6)}`
+        }
+    },
     getCurrentDivisonStandings: function () {
-        return asyncFetch("standings");
+        return asyncFetch("standings/byDivision");
     }
 };

@@ -4,14 +4,29 @@
       <router-link to="/standings">Standings</router-link>
     </div>
     <div class="main-container">
-      <router-view></router-view>
+      <router-view :currentSeasonData="currentSeasonData"></router-view>
     </div>
   </div>
 </template>
 
 <script>
+import API from "../config/api"
+
 export default {
-  name: "App"
+  name: "App",
+  data() {
+    return {
+      error: "",
+      currentSeasonData: {}
+    };
+  },
+  async created() {
+    try {
+      this.currentSeasonData = await API.getCurrentSeason();
+    } catch (err) {
+      this.error = err;
+    }
+  }
 };
 </script>
 
