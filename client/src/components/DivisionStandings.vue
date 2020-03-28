@@ -12,7 +12,7 @@ export default {
   name: "DivisionStandings",
   data() {
     return {
-      error: '',
+      error: "",
       standings: {}
     };
   },

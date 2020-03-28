@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import DivisionStandings from '../components/DivisionStandings.vue'
+import Standings from '../views/Standings.vue'
 
 Vue.use(Router)
 
@@ -12,7 +12,7 @@ export default new Router({
         },
         {
             path: '/standings',
-            component: DivisionStandings
+            component: Standings
         }
     ]
 })
