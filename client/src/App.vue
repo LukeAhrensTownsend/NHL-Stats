@@ -3,14 +3,14 @@
     <div class="navbar">
       <router-link to="/standings">Standings</router-link>
     </div>
-    <div class="main-container">
+    <div class="view-container">
       <router-view :currentSeasonData="currentSeasonData"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import API from "../config/api"
+import API from "../config/api";
 
 export default {
   name: "App",
@@ -36,13 +36,14 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: Tahoma, Verdana, sans-serif;
 }
 
 .navbar {
-  background-color: white;
+  background-color: #FFF;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   width: 100%;
@@ -50,7 +51,7 @@ body {
 
 .navbar a {
   display: inline-block;
-  padding: 10px 15px;
+  padding: 15px;
 }
 
 .router-link-active {
@@ -58,5 +59,10 @@ body {
   cursor: default;
   font-weight: 600;
   text-decoration: none;
+}
+
+.view-container {
+  padding-top: 25px;
+  padding-bottom: 10px;
 }
 </style>

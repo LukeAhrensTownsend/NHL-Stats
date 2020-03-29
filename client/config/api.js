@@ -18,7 +18,36 @@ module.exports = {
             currentSeasonString: `${data.seasons[0].seasonId.substring(0, 4)}-${data.seasons[0].seasonId.substring(6)}`
         }
     },
-    getCurrentDivisonStandings: function () {
-        return asyncFetch("standings/byDivision");
+    getCurrentDivisionStandings: async function () {
+        let data = await asyncFetch("standings/byDivision?expand=standings.record");
+
+        return {
+            easternConferenceStandings: {
+                conferenceName: "Eastern",
+                divisionRecords: {
+                    metropolitanDivisionStandings: {
+                        divisionName: "Metropolitan",
+                        teamRecords: data.records[0].teamRecords
+                    },
+                    atlanticDivisionStandings: {
+                        divisionName: "Atlantic",
+                        teamRecords: data.records[1].teamRecords
+                    }
+                }
+            },
+            westernConferenceStandings: {
+                conferenceName: "Western",
+                divisionRecords: {
+                    centralDivisionStandings: {
+                        divisionName: "Central",
+                        teamRecords: data.records[2].teamRecords
+                    },
+                    pacificDivisionStandings: {
+                        divisionName: "Pacific",
+                        teamRecords: data.records[3].teamRecords
+                    }
+                }
+            }
+        }
     }
 };
