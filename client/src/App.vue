@@ -42,7 +42,7 @@ body {
 }
 
 .navbar {
-  background-color: #FFF;
+  background-color: #333;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -50,6 +50,7 @@ body {
 }
 
 .navbar a {
+  color: #fff;
   display: inline-block;
   padding: 15px;
 }
@@ -62,7 +63,8 @@ body {
 }
 
 .view-container {
-  padding-top: 25px;
-  padding-bottom: 10px;
+  background-color: rgb(250, 250, 250);
+  color: #222;
+  padding: 25px 4% 10px 4%;
 }
 </style>

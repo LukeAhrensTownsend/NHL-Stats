@@ -89,4 +89,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.division-standings-container {
+  margin: 0 1%;
+}
 </style>
