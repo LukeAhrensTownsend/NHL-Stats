@@ -18,7 +18,7 @@
         <div class="standings-table">
           <table>
             <tr class="table-head">
-              <th colspan="2">{{division.divisionName}}</th>
+              <th colspan="2">{{ division.divisionName }}</th>
               <th>GP</th>
               <th>W</th>
               <th>L</th>
@@ -61,7 +61,6 @@
         </div>
       </div>
     </div>
-    <pre>{{ standings }}</pre>
   </div>
 </template>
 
@@ -90,6 +89,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .division-standings-container {
-  margin: 0 1%;
+  margin: 1%;
 }
 </style>

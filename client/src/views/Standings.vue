@@ -1,20 +1,37 @@
 <template>
   <div class="standings-container">
     <div class="standings-navbar">
-      <div v-bind:class="{ active: isActiveStandingsTab('division') }" v-on:click="setActiveStandingsTab('division')">Division</div>
-      <div v-bind:class="{ active: isActiveStandingsTab('conference') }" v-on:click="setActiveStandingsTab('conference')">Conference</div>
-      <div v-bind:class="{ active: isActiveStandingsTab('wildcard') }" v-on:click="setActiveStandingsTab('wildcard')">Wild Card</div>
-      <div v-bind:class="{ active: isActiveStandingsTab('league') }" v-on:click="setActiveStandingsTab('league')">League</div>
+      <div
+        v-bind:class="{ active: isActiveStandingsTab('division') }"
+        v-on:click="setActiveStandingsTab('division')"
+      >Division</div>
+      <div
+        v-bind:class="{ active: isActiveStandingsTab('conference') }"
+        v-on:click="setActiveStandingsTab('conference')"
+      >Conference</div>
+      <div
+        v-bind:class="{ active: isActiveStandingsTab('wildcard') }"
+        v-on:click="setActiveStandingsTab('wildcard')"
+      >Wild Card</div>
+      <div
+        v-bind:class="{ active: isActiveStandingsTab('league') }"
+        v-on:click="setActiveStandingsTab('league')"
+      >League</div>
     </div>
     <DivisionStandings
       :currentSeasonData="this.$props.currentSeasonData"
       v-show="isActiveStandingsTab('division')"
     />
+    <ConferenceStandings
+      :currentSeasonData="this.$props.currentSeasonData"
+      v-show="isActiveStandingsTab('conference')"
+    />
   </div>
 </template>
 
 <script>
-import DivisionStandings from "../components/DivisionStandings";
+import DivisionStandings from "../components/DivisionStandings"
+import ConferenceStandings from "../components/ConferenceStandings"
 
 export default {
   name: "Standings",
@@ -25,7 +42,8 @@ export default {
     };
   },
   components: {
-    DivisionStandings
+    DivisionStandings,
+    ConferenceStandings
   },
   methods: {
     setActiveStandingsTab: function(tab) {
@@ -42,7 +60,8 @@ export default {
 .standings-container {
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .standings-navbar {
@@ -61,6 +80,11 @@ export default {
 
 .standings-navbar div:first-child {
   border-left: none;
+  border-top-left-radius: 5px;
+}
+
+.standings-navbar div:last-child {
+  border-top-right-radius: 5px;
 }
 
 .standings-navbar div:hover {
@@ -72,6 +96,7 @@ export default {
   background-color: #fff;
   border-bottom: none;
 }
+
 .standings-navbar .active:hover {
   background-color: initial;
   cursor: default;
@@ -89,7 +114,7 @@ export default {
 }
 
 .standings-header {
-  font-size: 1.4em;
+  font-size: 1.5em;
   font-weight: 600;
 }
 
@@ -103,11 +128,22 @@ export default {
   margin-bottom: 25px;
 }
 
+.conference-container:last-child {
+  margin-bottom: 0;
+}
+
+.division-container {
+  margin-bottom: 10px;
+}
+
+.division-container:last-child {
+  margin-bottom: 0;
+}
+
 .standings-table {
   border: 1px solid #ddd;
   border-radius: 3px;
   font-size: 0.9em;
-  margin-bottom: 15px;
   overflow-x: auto;
   width: 100%;
 }

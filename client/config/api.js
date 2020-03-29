@@ -49,5 +49,19 @@ module.exports = {
                 }
             }
         }
+    },
+    getCurrentConferenceStandings: async function () {
+        let data = await asyncFetch("standings/byConference?expand=standings.record");
+
+        return {
+            easternConferenceStandings: {
+                conferenceName: "Eastern",
+                teamRecords: data.records[0].teamRecords
+            },
+            westernConferenceStandings: {
+                conferenceName: "Western",
+                teamRecords: data.records[1].teamRecords
+            }
+        }
     }
 };
