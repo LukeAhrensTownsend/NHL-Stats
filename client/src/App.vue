@@ -38,11 +38,11 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: Tahoma, Verdana, sans-serif;
+  font-family: Verdana, Helvetica, sans-serif;
 }
 
 .navbar {
-  background-color: #333;
+  background-color: #222;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -63,7 +63,7 @@ body {
 }
 
 .view-container {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(245, 245, 245);
   color: #222;
   padding: 25px 4% 10px 4%;
 }

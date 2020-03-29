@@ -9,7 +9,6 @@
       :key="conference.conferenceName"
       class="conference-container"
     >
-      <div class="conference-header">{{ conference.conferenceName }}</div>
       <div class="standings-table">
         <table>
           <tr class="table-head">
@@ -30,7 +29,7 @@
             <th>STRK</th>
           </tr>
           <tr v-for="team in conference.teamRecords" :key="team.team.name">
-            <td>{{ team.divisionRank }}</td>
+            <td>{{ team.conferenceRank }}</td>
             <!-- <td>
             <a href="/teams/{{team.id}}">
               <img class="teamlogo" src="/NHL_team_logos/{{team.name}}.png" />

@@ -6,13 +6,13 @@
         v-on:click="setActiveStandingsTab('division')"
       >Division</div>
       <div
-        v-bind:class="{ active: isActiveStandingsTab('conference') }"
-        v-on:click="setActiveStandingsTab('conference')"
-      >Conference</div>
-      <div
         v-bind:class="{ active: isActiveStandingsTab('wildcard') }"
         v-on:click="setActiveStandingsTab('wildcard')"
       >Wild Card</div>
+      <div
+        v-bind:class="{ active: isActiveStandingsTab('conference') }"
+        v-on:click="setActiveStandingsTab('conference')"
+      >Conference</div>
       <div
         v-bind:class="{ active: isActiveStandingsTab('league') }"
         v-on:click="setActiveStandingsTab('league')"
@@ -26,12 +26,17 @@
       :currentSeasonData="this.$props.currentSeasonData"
       v-show="isActiveStandingsTab('conference')"
     />
+    <LeagueStandings
+      :currentSeasonData="this.$props.currentSeasonData"
+      v-show="isActiveStandingsTab('league')"
+    />
   </div>
 </template>
 
 <script>
-import DivisionStandings from "../components/DivisionStandings"
-import ConferenceStandings from "../components/ConferenceStandings"
+import DivisionStandings from "../components/DivisionStandings";
+import ConferenceStandings from "../components/ConferenceStandings";
+import LeagueStandings from "../components/LeagueStandings";
 
 export default {
   name: "Standings",
@@ -43,7 +48,8 @@ export default {
   },
   components: {
     DivisionStandings,
-    ConferenceStandings
+    ConferenceStandings,
+    LeagueStandings
   },
   methods: {
     setActiveStandingsTab: function(tab) {
@@ -174,7 +180,7 @@ export default {
 }
 
 .standings-table th {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(245, 245, 245);
   font-weight: 600;
 }
 </style>

@@ -63,5 +63,13 @@ module.exports = {
                 teamRecords: data.records[1].teamRecords
             }
         }
+    },
+    getCurrentLeagueStandings: async function () {
+        let data = await asyncFetch("standings/byLeague?expand=standings.record");
+
+        return {
+            leagueName: "NHL",
+            teamRecords: data.records[0].teamRecords
+        }
     }
 };
