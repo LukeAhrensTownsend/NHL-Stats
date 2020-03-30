@@ -1,9 +1,8 @@
 <template>
   <div class="league-standings-container">
     <p class="error" v-if="error">{{ error }}</p>
-    <div
-      class="standings-header"
-    >League Standings ({{ this.$props.currentSeasonData.currentSeasonString }})</div>
+    <SeasonSelect :selectedSeason="this.$props.selectedSeason" v-on="$listeners" />
+    <div class="standings-header">League Standings ({{ this.selectedSeasonString }})</div>
     <div class="standings-table">
       <table>
         <tr class="table-head">
@@ -52,11 +51,15 @@
 </template>
 
 <script>
-import API from "../../config/api";
+import API from "../../../config/api";
+import SeasonSelect from "../SeasonSelect";
 
 export default {
   name: "LeagueStandings",
-  props: ["currentSeasonData"],
+  props: ["currentSeasonData", "selectedSeason"],
+  components: {
+    SeasonSelect
+  },
   data() {
     return {
       error: "",
@@ -66,9 +69,27 @@ export default {
   async created() {
     try {
       console.log("< REQUEST MADE TO API >");
-      this.standings = await API.getCurrentLeagueStandings();
+      this.standings = await API.getLeagueStandings(this.$props.selectedSeason);
     } catch (err) {
       this.error = err;
+    }
+  },
+  computed: {
+    selectedSeasonString: function() {
+      return `${this.selectedSeason.substring(
+        0,
+        4
+      )}-${this.selectedSeason.substring(4)}`;
+    }
+  },
+  watch: {
+    selectedSeason: async function(season) {
+      try {
+        this.standings = await API.getLeagueStandings(season);
+        this.error = "";
+      } catch (err) {
+        this.error = err;
+      }
     }
   }
 };

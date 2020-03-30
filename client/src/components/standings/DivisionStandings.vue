@@ -1,9 +1,8 @@
 <template>
-  <div class="wildcard-standings-container">
+  <div class="division-standings-container">
     <p class="error" v-if="error">{{ error }}</p>
-    <div
-      class="standings-header"
-    >Wild Card Standings ({{ this.$props.currentSeasonData.currentSeasonString }})</div>
+    <SeasonSelect :selectedSeason="this.$props.selectedSeason" v-on="$listeners" />
+    <div class="standings-header">Division Standings ({{ this.selectedSeasonString }})</div>
     <div
       v-for="conference in standings"
       :key="conference.conferenceName"
@@ -35,7 +34,7 @@
               <th>STRK</th>
             </tr>
             <tr v-for="team in division.teamRecords" :key="team.team.name">
-              <td>{{ (team.wildCardRank === "0" ? team.divisionRank : team.wildCardRank) }}</td>
+              <td>{{ team.divisionRank }}</td>
               <!-- <td>
             <a href="/teams/{{team.id}}">
               <img class="teamlogo" src="/NHL_team_logos/{{team.name}}.png" />
@@ -65,11 +64,15 @@
 </template>
 
 <script>
-import API from "../../config/api";
+import API from "../../../config/api";
+import SeasonSelect from "../SeasonSelect";
 
 export default {
-  name: "WildcardStandings",
-  props: ["currentSeasonData"],
+  name: "DivisionStandings",
+  props: ["currentSeasonData", "selectedSeason"],
+  components: {
+    SeasonSelect
+  },
   data() {
     return {
       error: "",
@@ -78,13 +81,34 @@ export default {
   },
   async created() {
     try {
-      this.standings = await API.getCurrentWildcardStandings();
+      this.standings = await API.getDivisionStandings(
+        this.$props.selectedSeason
+      );
     } catch (err) {
       this.error = err;
+    }
+  },
+  computed: {
+    selectedSeasonString: function() {
+      return `${this.selectedSeason.substring(
+        0,
+        4
+      )}-${this.selectedSeason.substring(4)}`;
+    }
+  },
+  watch: {
+    selectedSeason: async function(season) {
+      try {
+        this.standings = await API.getDivisionStandings(season);
+        this.error = "";
+      } catch (err) {
+        this.error = err;
+      }
     }
   }
 };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

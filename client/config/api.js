@@ -18,8 +18,8 @@ module.exports = {
             currentSeasonString: `${data.seasons[0].seasonId.substring(0, 4)}-${data.seasons[0].seasonId.substring(6)}`
         }
     },
-    getCurrentDivisionStandings: async function () {
-        let data = await asyncFetch("standings/byDivision?expand=standings.record");
+    getDivisionStandings: async function (season) {
+        let data = await asyncFetch(`standings/byDivision?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -50,8 +50,8 @@ module.exports = {
             }
         }
     },
-    getCurrentWildcardStandings: async function () {
-        let data = await asyncFetch("standings/wildCardWithLeaders?expand=standings.record");
+    getWildcardStandings: async function (season) {
+        let data = await asyncFetch(`standings/wildCardWithLeaders?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -90,8 +90,8 @@ module.exports = {
             }
         }
     },
-    getCurrentConferenceStandings: async function () {
-        let data = await asyncFetch("standings/byConference?expand=standings.record");
+    getConferenceStandings: async function (season) {
+        let data = await asyncFetch(`standings/byConference?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -104,8 +104,8 @@ module.exports = {
             }
         }
     },
-    getCurrentLeagueStandings: async function () {
-        let data = await asyncFetch("standings/byLeague?expand=standings.record");
+    getLeagueStandings: async function (season) {
+        let data = await asyncFetch(`standings/byLeague?expand=standings.record&season=${season}`);
 
         return {
             leagueName: "NHL",

@@ -21,18 +21,26 @@
     <div class="standings-content-container">
       <DivisionStandings
         :currentSeasonData="this.$props.currentSeasonData"
+        :selectedSeason="this.selectedSeason"
+        @setSelectedSeason="setSelectedSeason"
         v-show="isActiveStandingsTab('division')"
       />
       <WildcardStandings
         :currentSeasonData="this.$props.currentSeasonData"
+        :selectedSeason="this.selectedSeason"
+        @setSelectedSeason="setSelectedSeason"
         v-show="isActiveStandingsTab('wildcard')"
       />
       <ConferenceStandings
         :currentSeasonData="this.$props.currentSeasonData"
+        :selectedSeason="this.selectedSeason"
+        @setSelectedSeason="setSelectedSeason"
         v-show="isActiveStandingsTab('conference')"
       />
       <LeagueStandings
         :currentSeasonData="this.$props.currentSeasonData"
+        :selectedSeason="this.selectedSeason"
+        @setSelectedSeason="setSelectedSeason"
         v-show="isActiveStandingsTab('league')"
       />
     </div>
@@ -40,17 +48,18 @@
 </template>
 
 <script>
-import DivisionStandings from "../components/DivisionStandings";
-import WildcardStandings from "../components/WildcardStandings";
-import ConferenceStandings from "../components/ConferenceStandings";
-import LeagueStandings from "../components/LeagueStandings";
+import DivisionStandings from "../components/standings/DivisionStandings";
+import WildcardStandings from "../components/standings/WildcardStandings";
+import ConferenceStandings from "../components/standings/ConferenceStandings";
+import LeagueStandings from "../components/standings/LeagueStandings";
 
 export default {
   name: "Standings",
   props: ["currentSeasonData"],
   data: function() {
     return {
-      activeStandingsTab: "division"
+      activeStandingsTab: "division",
+      selectedSeason: "20192020"
     };
   },
   components: {
@@ -65,6 +74,9 @@ export default {
     },
     isActiveStandingsTab: function(tab) {
       return this.activeStandingsTab === tab;
+    },
+    setSelectedSeason: function(season) {
+      this.selectedSeason = season;
     }
   }
 };
@@ -132,8 +144,7 @@ export default {
 }
 
 .standings-header {
-  font-size: 1.5em;
-  font-weight: 600;
+  font-size: 1.6em;
 }
 
 .conference-header {
