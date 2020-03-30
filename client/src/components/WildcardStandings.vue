@@ -1,9 +1,9 @@
 <template>
-  <div class="division-standings-container">
+  <div class="wildcard-standings-container">
     <p class="error" v-if="error">{{ error }}</p>
     <div
       class="standings-header"
-    >Division Standings ({{ this.$props.currentSeasonData.currentSeasonString }})</div>
+    >Wild Card Standings ({{ this.$props.currentSeasonData.currentSeasonString }})</div>
     <div
       v-for="conference in standings"
       :key="conference.conferenceName"
@@ -35,7 +35,7 @@
               <th>STRK</th>
             </tr>
             <tr v-for="team in division.teamRecords" :key="team.team.name">
-              <td>{{ team.divisionRank }}</td>
+              <td>{{ (team.wildCardRank === "0" ? team.divisionRank : team.wildCardRank) }}</td>
               <!-- <td>
             <a href="/teams/{{team.id}}">
               <img class="teamlogo" src="/NHL_team_logos/{{team.name}}.png" />
@@ -68,7 +68,7 @@
 import API from "../../config/api";
 
 export default {
-  name: "DivisionStandings",
+  name: "WildcardStandings",
   props: ["currentSeasonData"],
   data() {
     return {
@@ -78,7 +78,7 @@ export default {
   },
   async created() {
     try {
-      this.standings = await API.getCurrentDivisionStandings();
+      this.standings = await API.getCurrentWildcardStandings();
     } catch (err) {
       this.error = err;
     }
@@ -86,6 +86,5 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

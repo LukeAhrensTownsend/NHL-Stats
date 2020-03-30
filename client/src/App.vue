@@ -65,6 +65,6 @@ body {
 .view-container {
   background-color: rgb(245, 245, 245);
   color: #222;
-  padding: 25px 4% 10px 4%;
+  padding: 25px 3%;
 }
 </style>

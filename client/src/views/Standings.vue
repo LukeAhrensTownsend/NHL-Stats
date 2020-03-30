@@ -18,23 +18,30 @@
         v-on:click="setActiveStandingsTab('league')"
       >League</div>
     </div>
-    <DivisionStandings
-      :currentSeasonData="this.$props.currentSeasonData"
-      v-show="isActiveStandingsTab('division')"
-    />
-    <ConferenceStandings
-      :currentSeasonData="this.$props.currentSeasonData"
-      v-show="isActiveStandingsTab('conference')"
-    />
-    <LeagueStandings
-      :currentSeasonData="this.$props.currentSeasonData"
-      v-show="isActiveStandingsTab('league')"
-    />
+    <div class="standings-content-container">
+      <DivisionStandings
+        :currentSeasonData="this.$props.currentSeasonData"
+        v-show="isActiveStandingsTab('division')"
+      />
+      <WildcardStandings
+        :currentSeasonData="this.$props.currentSeasonData"
+        v-show="isActiveStandingsTab('wildcard')"
+      />
+      <ConferenceStandings
+        :currentSeasonData="this.$props.currentSeasonData"
+        v-show="isActiveStandingsTab('conference')"
+      />
+      <LeagueStandings
+        :currentSeasonData="this.$props.currentSeasonData"
+        v-show="isActiveStandingsTab('league')"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import DivisionStandings from "../components/DivisionStandings";
+import WildcardStandings from "../components/WildcardStandings";
 import ConferenceStandings from "../components/ConferenceStandings";
 import LeagueStandings from "../components/LeagueStandings";
 
@@ -48,6 +55,7 @@ export default {
   },
   components: {
     DivisionStandings,
+    WildcardStandings,
     ConferenceStandings,
     LeagueStandings
   },
@@ -119,6 +127,10 @@ export default {
   border-bottom-right-radius: 0;
 }
 
+.standings-content-container {
+  padding: 2%;
+}
+
 .standings-header {
   font-size: 1.5em;
   font-weight: 600;
@@ -165,7 +177,7 @@ export default {
 }
 
 .standings-table tr:hover {
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(250, 250, 250);
   cursor: default;
 }
 
@@ -182,5 +194,9 @@ export default {
 .standings-table th {
   background-color: rgb(245, 245, 245);
   font-weight: 600;
+}
+
+.standings-table th:first-child {
+  width: 20%;
 }
 </style>

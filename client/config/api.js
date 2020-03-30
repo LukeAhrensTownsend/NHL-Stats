@@ -50,6 +50,46 @@ module.exports = {
             }
         }
     },
+    getCurrentWildcardStandings: async function () {
+        let data = await asyncFetch("standings/wildCardWithLeaders?expand=standings.record");
+
+        return {
+            easternConferenceStandings: {
+                conferenceName: "Eastern",
+                divisionRecords: {
+                    metropolitanDivisionLeaders: {
+                        divisionName: "Metropolitan",
+                        teamRecords: data.records[2].teamRecords
+                    },
+                    atlanticDivisionLeaders: {
+                        divisionName: "Atlantic",
+                        teamRecords: data.records[3].teamRecords
+                    },
+                    wildCardRecords: {
+                        divisionName: "Wild Card",
+                        teamRecords: data.records[0].teamRecords
+                    }
+                }
+            },
+            westernConferenceStandings: {
+                conferenceName: "Western",
+                divisionRecords: {
+                    centralDivisionLeaders: {
+                        divisionName: "Central",
+                        teamRecords: data.records[4].teamRecords
+                    },
+                    pacificDivisionLeaders: {
+                        divisionName: "Pacific",
+                        teamRecords: data.records[5].teamRecords
+                    },
+                    wildCardRecords: {
+                        divisionName: "Wild Card",
+                        teamRecords: data.records[1].teamRecords
+                    }
+                }
+            }
+        }
+    },
     getCurrentConferenceStandings: async function () {
         let data = await asyncFetch("standings/byConference?expand=standings.record");
 

@@ -80,7 +80,4 @@ export default {
 </script>
 
 <style scoped>
-.conference-standings-container {
-  margin: 1%;
-}
 </style>

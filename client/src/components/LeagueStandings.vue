@@ -75,7 +75,4 @@ export default {
 </script>
 
 <style scoped>
-.league-standings-container {
-  margin: 1%;
-}
 </style>
