@@ -1,8 +1,8 @@
 <template>
   <div>
     <select
-      v-model="this.$props.selectedSeason"
-      @change="$emit('setSelectedSeason', $event.target.value)"
+      v-bind:value="this.$route.params.standingsSeason"
+      @change="$router.push({ params: { standingsSeason: $event.target.value } })"
     >
       <option value="20192020">2019-2020</option>
       <option value="20182019">2018-2019</option>
@@ -106,15 +106,13 @@
       <option value="19201921">1920-1921</option>
       <option value="19191920">1919-1920</option>
       <option value="19181919">1918-1919</option>
-      <option value="19171918">1917-1918</option>
     </select>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SeasonSelect",
-  props: ["selectedSeason"]
+  name: "SeasonSelect"
 };
 </script>
 
@@ -133,7 +131,8 @@ select {
   float: right;
   font-family: inherit;
   font-size: 1em;
-  margin-top: -5px;
+  margin-right: 2%;
+  margin-top: 15px;
   padding: 10px;
   width: 150px;
 }

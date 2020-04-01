@@ -2,82 +2,172 @@
   <div class="standings-container">
     <div class="standings-navbar">
       <div
-        v-bind:class="{ active: isActiveStandingsTab('division') }"
-        v-on:click="setActiveStandingsTab('division')"
+        v-bind:class="{ active: this.$route.params.standingsCategory === 'division' }"
+        v-on:click="$router.push('division')"
+        v-if="this.divisionsInUse"
       >Division</div>
       <div
-        v-bind:class="{ active: isActiveStandingsTab('wildcard') }"
-        v-on:click="setActiveStandingsTab('wildcard')"
+        v-bind:class="{ active: this.$route.params.standingsCategory === 'wildcard' }"
+        v-on:click="$router.push('wildcard')"
+        v-if="this.wildCardInUse"
       >Wild Card</div>
       <div
-        v-bind:class="{ active: isActiveStandingsTab('conference') }"
-        v-on:click="setActiveStandingsTab('conference')"
+        v-bind:class="{ active: this.$route.params.standingsCategory === 'conference' }"
+        v-on:click="$router.push('conference')"
+        v-if="this.conferencesInUse"
       >Conference</div>
       <div
-        v-bind:class="{ active: isActiveStandingsTab('league') }"
-        v-on:click="setActiveStandingsTab('league')"
+        v-bind:class="{ active: this.$route.params.standingsCategory === 'league' }"
+        v-on:click="$router.push('league')"
       >League</div>
     </div>
+
+    <SeasonSelect />
+    <div class="standings-header">{{ this.standingsHeader }}</div>
+
     <div class="standings-content-container">
       <DivisionStandings
-        :currentSeasonData="this.$props.currentSeasonData"
-        :selectedSeason="this.selectedSeason"
-        @setSelectedSeason="setSelectedSeason"
-        v-show="isActiveStandingsTab('division')"
+        :standings="this.standings.divisionStandings"
+        v-if="this.$route.params.standingsCategory === 'division'"
       />
       <WildcardStandings
-        :currentSeasonData="this.$props.currentSeasonData"
-        :selectedSeason="this.selectedSeason"
-        @setSelectedSeason="setSelectedSeason"
-        v-show="isActiveStandingsTab('wildcard')"
+        :standings="this.standings.wildcardStandings"
+        v-if="this.$route.params.standingsCategory === 'wildcard'"
       />
       <ConferenceStandings
-        :currentSeasonData="this.$props.currentSeasonData"
-        :selectedSeason="this.selectedSeason"
-        @setSelectedSeason="setSelectedSeason"
-        v-show="isActiveStandingsTab('conference')"
+        :standings="this.standings.conferenceStandings"
+        v-if="this.$route.params.standingsCategory === 'conference'"
       />
       <LeagueStandings
-        :currentSeasonData="this.$props.currentSeasonData"
-        :selectedSeason="this.selectedSeason"
-        @setSelectedSeason="setSelectedSeason"
-        v-show="isActiveStandingsTab('league')"
+        :standings="this.standings.leagueStandings"
+        v-if="this.$route.params.standingsCategory === 'league'"
       />
     </div>
   </div>
 </template>
 
 <script>
+import API from "../../config/api";
 import DivisionStandings from "../components/standings/DivisionStandings";
 import WildcardStandings from "../components/standings/WildcardStandings";
 import ConferenceStandings from "../components/standings/ConferenceStandings";
 import LeagueStandings from "../components/standings/LeagueStandings";
+import SeasonSelect from "../components/SeasonSelect";
 
 export default {
   name: "Standings",
-  props: ["currentSeasonData"],
+  props: ["currentStandingsSeason"],
   data: function() {
     return {
-      activeStandingsTab: "division",
-      selectedSeason: "20192020"
+      standings: {
+        divisionStandings: {},
+        wildcardStandings: {},
+        conferenceStandings: {},
+        leagueStandings: {}
+      },
+      divisionsInUse: true,
+      wildCardInUse: true,
+      conferencesInUse: true
     };
   },
   components: {
     DivisionStandings,
     WildcardStandings,
     ConferenceStandings,
-    LeagueStandings
+    LeagueStandings,
+    SeasonSelect
   },
   methods: {
-    setActiveStandingsTab: function(tab) {
-      this.activeStandingsTab = tab;
-    },
-    isActiveStandingsTab: function(tab) {
-      return this.activeStandingsTab === tab;
-    },
-    setSelectedSeason: function(season) {
-      this.selectedSeason = season;
+    fetchSeasonStandings: async function() {
+      try {
+        await API.getSeasonData().then(seasonData => {
+          let season =
+            seasonData.seasons[
+              parseInt(this.$route.params.standingsSeason.substring(0, 4)) -
+                1918
+            ];
+
+          this.divisionsInUse = season.divisionsInUse;
+          this.wildCardInUse = season.wildCardInUse;
+          this.conferencesInUse = season.conferencesInUse;
+        });
+
+        if (this.divisionsInUse)
+          this.standings.divisionStandings = await API.getDivisionStandings(
+            this.$route.params.standingsSeason
+          );
+        if (this.wildCardInUse)
+          this.standings.wildcardStandings = await API.getWildcardStandings(
+            this.$route.params.standingsSeason
+          );
+        if (this.conferencesInUse)
+          this.standings.conferenceStandings = await API.getConferenceStandings(
+            this.$route.params.standingsSeason
+          );
+        this.standings.leagueStandings = await API.getLeagueStandings(
+          this.$route.params.standingsSeason
+        );
+      } catch (err) {
+        this.error = err;
+      }
+
+      switch (this.$route.params.standingsCategory) {
+        case "wildcard":
+          if (!this.wildCardInUse) {
+            if (!this.divisionsInUse) {
+              this.$router.replace("league");
+            } else {
+              this.$router.replace("division");
+            }
+          }
+          break;
+        case "conference":
+          if (!this.conferencesInUse) {
+            if (!this.divisionsInUse) {
+              this.$router.replace("league");
+            } else {
+              this.$router.replace("division");
+            }
+          }
+          break;
+        case "division":
+          if (!this.divisionsInUse) this.$router.replace("league");
+          break;
+      }
     }
+  },
+  watch: {
+    "$route.params.standingsSeason": function() {
+      this.fetchSeasonStandings();
+    }
+  },
+  computed: {
+    standingsHeader: function() {
+      let temp = "";
+
+      switch (this.$route.params.standingsCategory) {
+        case "division":
+          temp = "Division";
+          break;
+        case "wildcard":
+          temp = "Wild Card";
+          break;
+        case "conference":
+          temp = "Conference";
+          break;
+        case "league":
+          temp = "League";
+          break;
+      }
+
+      return `${temp} Standings (${this.$route.params.standingsSeason.substring(
+        0,
+        4
+      )}-${this.$route.params.standingsSeason.substring(4)})`;
+    }
+  },
+  async created() {
+    this.fetchSeasonStandings();
   }
 };
 </script>
@@ -145,6 +235,8 @@ export default {
 
 .standings-header {
   font-size: 1.6em;
+  margin-left: 2%;
+  margin-top: 40px;
 }
 
 .conference-header {
@@ -152,7 +244,6 @@ export default {
   margin-bottom: 10px;
 }
 
-.standings-header,
 .conference-container {
   margin-bottom: 25px;
 }
@@ -199,7 +290,7 @@ export default {
 .standings-table th,
 .standings-table td {
   text-align: left;
-  padding: 8px;
+  padding: 12px 8px;
 }
 
 .standings-table th {
@@ -209,5 +300,10 @@ export default {
 
 .standings-table th:first-child {
   width: 20%;
+}
+
+.standings-team-logo {
+  height: 30px;
+  margin-top: 5px;
 }
 </style>

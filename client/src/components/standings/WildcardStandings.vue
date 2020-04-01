@@ -1,10 +1,8 @@
 <template>
   <div class="wildcard-standings-container">
     <p class="error" v-if="error">{{ error }}</p>
-    <SeasonSelect :selectedSeason="this.$props.selectedSeason" v-on="$listeners" />
-    <div class="standings-header">Wild Card Standings ({{ this.selectedSeasonString }})</div>
     <div
-      v-for="conference in standings"
+      v-for="conference in this.$props.standings"
       :key="conference.conferenceName"
       class="conference-container"
     >
@@ -21,39 +19,40 @@
               <th>GP</th>
               <th>W</th>
               <th>L</th>
-              <th>OT</th>
+              <th v-show="division.teamRecords[0].leagueRecord.ties">T</th>
+              <th v-show="$route.params.standingsSeason.substring(4) > 1999">OT</th>
               <th>PTS</th>
-              <th>ROW</th>
+              <th v-show="division.teamRecords[0].row">ROW</th>
               <th>GF</th>
               <th>GA</th>
               <th>DIFF</th>
               <th>HOME</th>
               <th>AWAY</th>
-              <th>S/O</th>
+              <th v-show="$route.params.standingsSeason.substring(4) > 1999">S/O</th>
               <th>L10</th>
               <th>STRK</th>
             </tr>
             <tr v-for="team in division.teamRecords" :key="team.team.name">
               <td>{{ (team.wildCardRank === "0" ? team.divisionRank : team.wildCardRank) }}</td>
-              <!-- <td>
-            <a href="/teams/{{team.id}}">
-              <img class="teamlogo" src="/NHL_team_logos/{{team.name}}.png" />
-            </a>
-              </td>-->
               <td>{{ team.team.name }}</td>
               <td>{{ team.gamesPlayed }}</td>
               <td>{{ team.leagueRecord.wins }}</td>
               <td>{{ team.leagueRecord.losses }}</td>
-              <td>{{ team.leagueRecord.ot }}</td>
+              <td v-show="team.leagueRecord.ties">{{ team.leagueRecord.ties }}</td>
+              <td
+                v-show="$route.params.standingsSeason.substring(4) > 1999"
+              >{{ team.leagueRecord.ot }}</td>
               <td>{{ team.points }}</td>
-              <td>{{ team.row }}</td>
+              <td v-show="team.row">{{ team.row }}</td>
               <td>{{ team.goalsScored }}</td>
               <td>{{ team.goalsAgainst }}</td>
               <td>{{ team.goalsScored > team.goalsAgainst ? "+" : "" }}{{ (team.goalsScored - team.goalsAgainst) }}</td>
-              <td>{{ team.records.overallRecords[0].wins }}-{{ team.records.overallRecords[0].losses }}-{{ team.records.overallRecords[0].ot }}</td>
-              <td>{{ team.records.overallRecords[1].wins}}-{{ team.records.overallRecords[1].losses }}-{{ team.records.overallRecords[1].ot }}</td>
-              <td>{{ team.records.overallRecords[2].wins }}-{{ team.records.overallRecords[2].losses }}</td>
-              <td>{{ team.records.overallRecords[3].wins }}-{{ team.records.overallRecords[3].losses }}-{{ team.records.overallRecords[3].ot }}</td>
+              <td>{{ team.records.overallRecords[0].wins }}-{{ team.records.overallRecords[0].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[0].ot}` : ''}}</td>
+              <td>{{ team.records.overallRecords[1].wins}}-{{ team.records.overallRecords[1].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[0].ot}` : ''}}</td>
+              <td
+                v-show="$route.params.standingsSeason.substring(4) > 1999"
+              >{{ team.records.overallRecords[2].wins }}-{{ team.records.overallRecords[2].losses }}</td>
+              <td>{{ team.records.overallRecords[3].wins }}-{{ team.records.overallRecords[3].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[0].ot}` : ''}}</td>
               <td>{{ team.streak.streakCode }}</td>
             </tr>
           </table>
@@ -64,47 +63,13 @@
 </template>
 
 <script>
-import API from "../../../config/api";
-import SeasonSelect from "../SeasonSelect";
-
 export default {
   name: "WildcardStandings",
-  props: ["currentSeasonData", "selectedSeason"],
-  components: {
-    SeasonSelect
-  },
+  props: ["standings"],
   data() {
     return {
-      error: "",
-      standings: {}
+      error: ""
     };
-  },
-  async created() {
-    try {
-      this.standings = await API.getWildcardStandings(
-        this.$props.selectedSeason
-      );
-    } catch (err) {
-      this.error = err;
-    }
-  },
-  computed: {
-    selectedSeasonString: function() {
-      return `${this.selectedSeason.substring(
-        0,
-        4
-      )}-${this.selectedSeason.substring(4)}`;
-    }
-  },
-  watch: {
-    selectedSeason: async function(season) {
-      try {
-        this.standings = await API.getWildcardStandings(season);
-        this.error = "";
-      } catch (err) {
-        this.error = err;
-      }
-    }
   }
 };
 </script>
