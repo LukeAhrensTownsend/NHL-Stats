@@ -190,7 +190,7 @@ export default {
   border-bottom: 1px solid #ddd;
   border-left: 1px solid #ddd;
   flex: 1;
-  padding: 15px 0;
+  padding: 10px 0;
   text-align: center;
 }
 
@@ -234,7 +234,7 @@ export default {
 }
 
 .standings-header {
-  font-size: 1.6em;
+  font-size: 1.5em;
   margin-left: 2%;
   margin-top: 40px;
 }
@@ -263,7 +263,7 @@ export default {
 .standings-table {
   border: 1px solid #ddd;
   border-radius: 3px;
-  font-size: 0.9em;
+  font-size: 0.8em;
   overflow-x: auto;
   width: 100%;
 }

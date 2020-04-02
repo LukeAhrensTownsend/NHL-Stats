@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Standings from '../views/Standings.vue'
+import Teams from '../views/Teams.vue'
 
 Vue.use(Router)
 
@@ -25,6 +26,10 @@ export default new Router({
         {
             path: '/standings/:standingsSeason/:standingsCategory',
             component: Standings
+        },
+        {
+            path: '/teams/:teamId',
+            component: Teams
         }
     ]
 })

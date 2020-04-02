@@ -130,11 +130,11 @@ select {
   border-radius: 3px;
   float: right;
   font-family: inherit;
-  font-size: 1em;
+  font-size: 0.9em;
   margin-right: 2%;
   margin-top: 15px;
-  padding: 10px;
-  width: 150px;
+  padding: 8px;
+  width: 125px;
 }
 
 select::ms-expand {

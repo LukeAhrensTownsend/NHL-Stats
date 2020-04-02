@@ -10,6 +10,20 @@ let asyncFetch = async (url = "") => {
     }
 };
 
+let teamSortByCity = function(a, b) {
+    const teamCity_a = a.shortName;
+    const teamCity_b = b.shortName;
+
+    let comparison = 0;
+    if (teamCity_a > teamCity_b) {
+        comparison = 1;
+    } else {
+        comparison = -1;
+    }
+
+    return comparison;
+}
+
 module.exports = {
     getSeasonData: async function () {
         let data = await asyncFetch("seasons")
@@ -109,5 +123,36 @@ module.exports = {
             leagueName: "NHL",
             teamRecords: data.records[0].teamRecords
         }
+    },
+    getTeams: async function () {
+        let data = await asyncFetch("teams");
+        let returnObject = {
+            westernConference: {
+                conferenceName: "Western",
+                teamRecords: []
+            },
+            easternConference: {
+                conferenceName: "Eastern",
+                teamRecords: []
+            }
+        }
+
+        for (const team of data.teams) {
+            if (team.conference.name === "Western") {
+                returnObject.westernConference.teamRecords.push(team);
+            } else {
+                returnObject.easternConference.teamRecords.push(team);
+            }
+        }
+
+        returnObject.westernConference.teamRecords.sort(teamSortByCity);
+        returnObject.easternConference.teamRecords.sort(teamSortByCity);
+
+        return returnObject;
+    },
+    getTeamData: async function(teamId) {
+        let data = await asyncFetch(`teams/${teamId}?expand=team.roster&expand=team.schedule.previous&expand=team.schedule.next&expand=team.stats`);
+
+        return data.teams[0];
     }
 };

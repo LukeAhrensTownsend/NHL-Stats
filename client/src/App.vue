@@ -3,22 +3,28 @@
     <div class="navbar">
       <div class="navbar-links">
         <router-link to="/standings">Standings</router-link>
-        <router-link to="/teams">Teams</router-link>
+        <router-link to="/teams/0">Teams</router-link>
       </div>
     </div>
     <div class="view-container">
-      <router-view></router-view>
+      <router-view :teams="teams"></router-view>
     </div>
   </div>
 </template>
 
 <script>
+import API from "../config/api";
+
 export default {
   name: "App",
   data() {
     return {
-      error: ""
+      error: "",
+      teams: {}
     };
+  },
+  async created() {
+    this.teams = await API.getTeams();
   }
 };
 </script>
