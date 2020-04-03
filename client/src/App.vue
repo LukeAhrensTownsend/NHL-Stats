@@ -3,11 +3,11 @@
     <div class="navbar">
       <div class="navbar-links">
         <router-link to="/standings">Standings</router-link>
-        <router-link to="/teams/0">Teams</router-link>
+        <router-link to="/teams">Teams</router-link>
       </div>
     </div>
     <div class="view-container">
-      <router-view :teams="teams"></router-view>
+      <router-view :teamList="teamList"></router-view>
     </div>
   </div>
 </template>
@@ -20,16 +20,22 @@ export default {
   data() {
     return {
       error: "",
-      teams: {}
+      teamList: {}
     };
   },
   async created() {
-    this.teams = await API.getTeams();
+    this.teamList = await API.getTeams();
   }
 };
 </script>
 
 <style>
+html,
+body,
+#app {
+  height: 100%;
+}
+
 body {
   margin: 0;
 }
@@ -37,14 +43,17 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
   font-family: Verdana, Helvetica, sans-serif;
+  overflow-y: hidden;
 }
 
 .navbar {
   background-color: #222;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   display: flex;
-  position: sticky;
+  position: fixed;
   top: 0;
   width: 100%;
 }
@@ -77,6 +86,9 @@ body {
 .view-container {
   background-color: rgb(245, 245, 245);
   color: #222;
-  padding: 25px 3%;
+  flex: 1;
+  margin-top: 54px;
+  overflow-y: auto;
+  padding: 1% 25px;
 }
 </style>

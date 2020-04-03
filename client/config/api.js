@@ -153,6 +153,27 @@ module.exports = {
     getTeamData: async function(teamId) {
         let data = await asyncFetch(`teams/${teamId}?expand=team.roster&expand=team.schedule.previous&expand=team.schedule.next&expand=team.stats`);
 
-        return data.teams[0];
+        return {
+            id: data.teams[0].id,
+            name: data.teams[0].name,
+            locationName: data.teams[0].locationName,
+            teamName: data.teams[0].teamName,
+            abbrevation: data.teams[0].abbrevation,
+            venue: data.teams[0].venue.name,
+            division: data.teams[0].division.name,
+            conference: data.teams[0].conference.name,
+            teamStats: data.teams[0].teamStats,
+            roster: data.teams[0].roster.roster,
+            nearGames: {
+                previousGameSchedule: {
+                    header: "Previous Game",
+                    data: data.teams[0].previousGameSchedule
+                },
+                nextGameSchedule: {
+                    header: "Next Game",
+                    data: data.teams[0].nextGameSchedule
+                }
+            }
+        }
     }
 };

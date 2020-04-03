@@ -28,7 +28,15 @@ export default new Router({
             component: Standings
         },
         {
+            path: '/teams',
+            redirect: '/teams/0'
+        },
+        {
             path: '/teams/:teamId',
+            redirect: '/teams/0/schedule'
+        },
+        {
+            path: '/teams/:teamId/:teamStatsCategory',
             component: Teams
         }
     ]
