@@ -3,56 +3,59 @@
     <div class="team-near-games">
       <div
         class="team-near-game"
-        v-for="game in this.$props.selectedTeam.nearGames"
-        v-bind:key="game.id"
+        v-for="game in this.$props.selectedTeamData.teamData.nearGames"
+        v-bind:key="game.header"
       >
         <div class="team-near-game-header">{{game.header}}</div>
-        <div
-          class="team-near-game-time"
-        >{{new Date(game.data.dates[0].games[0].gameDate).toDateString()}} - {{new Date(game.data.dates[0].games[0].gameDate).toLocaleTimeString()}}</div>
-        <div class="team-near-game-venue">{{game.data.dates[0].games[0].venue.name}}</div>
-        <div class="team-near-game-scoreboard">
-          <div class="team-near-game-scoreboard-team">
-            <img
-              :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.away.team.id}.svg`)"
-            />
+        <div v-if="game.data">
+          <div
+            class="team-near-game-time"
+          >{{new Date(game.data.dates[0].games[0].gameDate).toDateString()}} - {{new Date(game.data.dates[0].games[0].gameDate).toLocaleTimeString()}}</div>
+          <div class="team-near-game-venue">{{game.data.dates[0].games[0].venue.name}}</div>
+          <div class="team-near-game-scoreboard">
+            <div class="team-near-game-scoreboard-team">
+              <img
+                :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.away.team.id}.svg`)"
+              />
+              <div
+                class="team-near-game-scoreboard-team-name"
+              >{{game.data.dates[0].games[0].teams.away.team.name}}</div>
+            </div>
             <div
-              class="team-near-game-scoreboard-team-name"
-            >{{game.data.dates[0].games[0].teams.away.team.name}}</div>
+              class="team-near-game-scoreboard-team-score"
+              v-show="game.header === 'Previous Game'"
+            >{{game.data.dates[0].games[0].teams.away.score}}</div>
+            <span>-</span>
+            <div
+              class="team-near-game-scoreboard-team-score"
+              v-show="game.header === 'Previous Game'"
+            >{{game.data.dates[0].games[0].teams.home.score}}</div>
+            <div class="team-near-game-scoreboard-team">
+              <img
+                :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.home.team.id}.svg`)"
+              />
+              <div
+                class="team-near-game-scoreboard-team-name"
+              >{{game.data.dates[0].games[0].teams.home.team.name}}</div>
+            </div>
           </div>
-          <div
-            class="team-near-game-scoreboard-team-score"
-            v-show="game.header === 'Previous Game'"
-          >{{game.data.dates[0].games[0].teams.away.score}}</div>
-          <span>-</span>
-          <div
-            class="team-near-game-scoreboard-team-score"
-            v-show="game.header === 'Previous Game'"
-          >{{game.data.dates[0].games[0].teams.home.score}}</div>
-          <div class="team-near-game-scoreboard-team">
-            <img
-              :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.home.team.id}.svg`)"
-            />
+          <div class="team-near-game-broadcasts">
+            TV:
             <div
-              class="team-near-game-scoreboard-team-name"
-            >{{game.data.dates[0].games[0].teams.home.team.name}}</div>
+              class="team-near-game-broadcasts-tv"
+              v-for="broadcast in game.data.dates[0].games[0].broadcasts"
+              v-bind:key="broadcast.id"
+            >{{`${broadcast.name}${(game.data.dates[0].games[0].broadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].broadcasts.length - 1)) ? ', ' : ''}`}}</div>
+            <span>&#183;</span>
+            Radio:
+            <div
+              class="team-near-game-broadcasts-radio"
+              v-for="broadcast in game.data.dates[0].games[0].radioBroadcasts"
+              v-bind:key="broadcast.name"
+            >{{`${broadcast.name} (${broadcast.type})${(game.data.dates[0].games[0].radioBroadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].radioBroadcasts.length - 1)) ? ', ' : ''}`}}</div>
           </div>
         </div>
-        <div class="team-near-game-broadcasts">
-          TV:
-          <div
-            class="team-near-game-broadcasts-tv"
-            v-for="broadcast in game.data.dates[0].games[0].broadcasts"
-            v-bind:key="broadcast.id"
-          >{{`${broadcast.name}${(game.data.dates[0].games[0].broadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].broadcasts.length - 1)) ? ', ' : ''}`}}</div>
-          <span>&#183;</span>
-          Radio:
-          <div
-            class="team-near-game-broadcasts-radio"
-            v-for="broadcast in game.data.dates[0].games[0].radioBroadcasts"
-            v-bind:key="broadcast.name"
-          >{{`${broadcast.name} (${broadcast.type})${(game.data.dates[0].games[0].radioBroadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].radioBroadcasts.length - 1)) ? ', ' : ''}`}}</div>
-        </div>
+        <div class="team-near-game-not-available" v-else>N/A</div>
       </div>
     </div>
   </div>
@@ -62,7 +65,7 @@
 export default {
   name: "TeamSchedule",
   props: {
-    selectedTeam: Object
+    selectedTeamData: Object
   }
 };
 </script>
@@ -90,12 +93,12 @@ export default {
   margin-bottom: 20px;
 }
 
-.team-near-game-time,
-.team-near-game-broadcasts {
+.team-near-game-time {
   font-size: 0.8em;
 }
 
 .team-near-game-broadcasts {
+  font-size: 0.7em;
   margin-top: 35px;
 }
 
@@ -146,5 +149,11 @@ export default {
 
 .team-near-game-scoreboard-team-score {
   font-size: 3.5em;
+}
+
+.team-near-game-not-available {
+  font-size: 2em;
+  margin-top: 80px;
+  text-align: center;
 }
 </style>

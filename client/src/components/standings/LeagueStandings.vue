@@ -50,7 +50,9 @@
 <script>
 export default {
   name: "LeagueStandings",
-  props: ["standings"],
+  props: {
+    standings: Object
+  },
   data() {
     return {
       error: ""

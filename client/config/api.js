@@ -10,7 +10,7 @@ let asyncFetch = async (url = "") => {
     }
 };
 
-let teamSortByCity = function(a, b) {
+let teamSortByCity = function (a, b) {
     const teamCity_a = a.shortName;
     const teamCity_b = b.shortName;
 
@@ -139,9 +139,15 @@ module.exports = {
 
         for (const team of data.teams) {
             if (team.conference.name === "Western") {
-                returnObject.westernConference.teamRecords.push(team);
+                returnObject.westernConference.teamRecords.push({
+                    teamData: team,
+                    chartColor: ""
+                });
             } else {
-                returnObject.easternConference.teamRecords.push(team);
+                returnObject.easternConference.teamRecords.push({
+                    teamData: team,
+                    chartColor: "#007cb2"
+                });
             }
         }
 
@@ -150,7 +156,7 @@ module.exports = {
 
         return returnObject;
     },
-    getTeamData: async function(teamId) {
+    getTeamData: async function (teamId) {
         let data = await asyncFetch(`teams/${teamId}?expand=team.roster&expand=team.schedule.previous&expand=team.schedule.next&expand=team.stats`);
 
         return {
@@ -175,5 +181,15 @@ module.exports = {
                 }
             }
         }
+    },
+    getSeasonGamesByTeam: async function (teamId, season) {
+        let data = await asyncFetch(`schedule?teamId=${teamId}&season=${season}`);
+
+        return data.dates;
+    },
+    getPlayerData: async function(playerId) {
+        let data = await asyncFetch(`people/${playerId}`);
+
+        return data;
     }
 };

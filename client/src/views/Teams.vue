@@ -11,12 +11,12 @@
           <a
             class="teams-navbar-team"
             v-for="team in conference.teamRecords"
-            v-bind:key="team.name"
+            v-bind:key="team.teamData.name"
           >
             <img
-              v-bind:class="{ active: $route.params.teamId == team.id }"
-              v-on:click="fetchTeamData(team.id)"
-              :src="require(`@/assets/NHL/team_logos/${team.id}.svg`)"
+              v-bind:class="{ active: $route.params.teamId == team.teamData.id }"
+              v-on:click="$route.params.teamId != team.teamData.id && $router.push({ params: { teamId: team.teamData.id } })"
+              :src="require(`@/assets/NHL/team_logos/${team.teamData.id}.svg`)"
             />
           </a>
         </div>
@@ -25,10 +25,10 @@
     <div
       id="team-container"
       class="team-container"
-      v-if="Object.keys(this.selectedTeam).length !== 0"
+      v-if="Object.keys(this.selectedTeamData).length !== 0 && !isFetching"
     >
-      <div class="teams-content-teamname">{{ selectedTeam.name }}</div>
-      <div class="teams-content-teamdivision">{{ selectedTeam.division.name }}</div>
+      <div class="teams-content-teamname">{{ selectedTeamData.teamData.name }}</div>
+      <div class="teams-content-teamdivision">{{ selectedTeamData.teamData.division.name }}</div>
       <div class="team-content">
         <div class="team-content-navbar">
           <div
@@ -46,23 +46,21 @@
         </div>
         <div class="team-content-main">
           <TeamSchedule
-            v-show="this.$route.params.teamStatsCategory === 'schedule'"
-            :selectedTeam="selectedTeam"
+            v-if="this.$route.params.teamStatsCategory === 'schedule'"
+            :selectedTeamData="selectedTeamData"
           />
           <TeamStats
-            v-show="this.$route.params.teamStatsCategory === 'stats'"
-            :selectedTeam="selectedTeam"
+            v-if="this.$route.params.teamStatsCategory === 'stats'"
+            :selectedTeamData="selectedTeamData"
           />
           <TeamRoster
-            v-show="this.$route.params.teamStatsCategory === 'roster'"
-            :selectedTeam="selectedTeam"
+            v-if="this.$route.params.teamStatsCategory === 'roster'"
+            :selectedTeamData="selectedTeamData"
           />
         </div>
       </div>
-      <br />
-      <br />
-      <pre>{{selectedTeam}}</pre>
     </div>
+    <div v-if="isFetching" class="loading-prompt">Gathering team data...</div>
   </div>
 </template>
 
@@ -74,11 +72,14 @@ import TeamRoster from "../components/teams/TeamRoster";
 
 export default {
   name: "Teams",
-  props: ["teamList"],
+  props: {
+      teamList: Object,
+      teamsDataCache: Array
+  },
   data: function() {
     return {
-      teamsData: [],
-      selectedTeam: {}
+      selectedTeamData: {},
+      isFetching: false
     };
   },
   components: {
@@ -88,16 +89,34 @@ export default {
   },
   methods: {
     fetchTeamData: async function(teamId) {
-      if (!this.teamsData.some(team => team.id === parseInt(teamId))) {
+      if (!this.$props.teamsDataCache.some(team => team.teamData.id === parseInt(teamId))) {
+        this.isFetching = true;
+
         let teamData = await API.getTeamData(teamId);
-        this.teamsData.push(teamData);
+        let seasonGames = await API.getSeasonGamesByTeam(teamId, "20192020");
+
+        for (const player of teamData.roster) {
+          let data = await API.getPlayerData(player.person.id);
+
+          player.person = data.people[0];
+          delete player.jerseyNumber;
+          delete player.position;
+        }
+
+        this.$emit("addToTeamsDataCache", {
+            teamData,
+            seasonGames
+        });
       }
 
-      this.selectedTeam = this.teamsData.find(
-        team => team.id === parseInt(teamId)
+      this.selectedTeamData = this.$props.teamsDataCache.find(
+        team => team.teamData.id === parseInt(teamId)
       );
+
       if (this.$route.params.teamId != teamId)
         this.$router.push({ params: { teamId: teamId } });
+
+      this.isFetching = false;
     }
   },
   watch: {
@@ -105,7 +124,7 @@ export default {
       if (this.$route.params.teamId !== "0") {
         this.fetchTeamData(this.$route.params.teamId);
       } else {
-        this.selectedTeam = {};
+        this.selectedTeamData = {};
       }
     }
   },
@@ -197,7 +216,7 @@ export default {
   border-bottom: 1px solid #ddd;
   border-left: 1px solid #ddd;
   flex: 1;
-  padding: 10px 0;
+  padding: 15px 0;
   text-align: center;
 }
 
@@ -248,5 +267,11 @@ export default {
 
 .team-content-main {
   padding: 1% 2% 2% 2%;
+}
+
+.loading-prompt {
+  font-size: 1.5em;
+  margin-top: 10%;
+  text-align: center;
 }
 </style>

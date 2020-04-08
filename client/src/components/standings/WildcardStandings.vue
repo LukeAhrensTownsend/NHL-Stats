@@ -65,7 +65,9 @@
 <script>
 export default {
   name: "WildcardStandings",
-  props: ["standings"],
+  props: {
+    standings: Object
+  },
   data() {
     return {
       error: ""

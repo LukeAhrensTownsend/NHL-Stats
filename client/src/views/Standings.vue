@@ -56,7 +56,6 @@ import SeasonSelect from "../components/SeasonSelect";
 
 export default {
   name: "Standings",
-  props: ["currentStandingsSeason"],
   data: function() {
     return {
       standings: {
@@ -191,7 +190,7 @@ export default {
   border-bottom: 1px solid #ddd;
   border-left: 1px solid #ddd;
   flex: 1;
-  padding: 10px 0;
+  padding: 15px 0;
   text-align: center;
 }
 

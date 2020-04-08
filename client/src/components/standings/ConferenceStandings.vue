@@ -58,7 +58,9 @@
 <script>
 export default {
   name: "ConferenceStandings",
-  props: ["standings"],
+  props: {
+    standings: Object
+  },
   data() {
     return {
       error: ""

@@ -7,7 +7,11 @@
       </div>
     </div>
     <div class="view-container">
-      <router-view :teamList="teamList"></router-view>
+      <router-view
+        :teamList="teamList"
+        :teamsDataCache="teamsDataCache"
+        v-on:addToTeamsDataCache="addToTeamsDataCache"
+      ></router-view>
     </div>
   </div>
 </template>
@@ -20,8 +24,14 @@ export default {
   data() {
     return {
       error: "",
-      teamList: {}
+      teamList: {},
+      teamsDataCache: []
     };
+  },
+  methods: {
+    addToTeamsDataCache(teamData) {
+      this.teamsDataCache.push(teamData);
+    }
   },
   async created() {
     this.teamList = await API.getTeams();
