@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import API from "../../config/api";
+import API from "../scripts/api";
 import TeamSchedule from "../components/teams/TeamSchedule";
 import TeamStats from "../components/teams/TeamStats";
 import TeamRoster from "../components/teams/TeamRoster";

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import API from "../config/api";
+import API from "./scripts/api";
 
 export default {
   name: "App",

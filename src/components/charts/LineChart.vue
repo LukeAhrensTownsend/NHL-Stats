@@ -1,5 +1,5 @@
 <script>
-import HELPERS from "../../../config/helpers";
+import HELPERS from "../../scripts/helpers";
 import { Line } from "vue-chartjs";
 
 export default {

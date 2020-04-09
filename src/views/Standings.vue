@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import API from "../../config/api";
+import API from "../scripts/api";
 import DivisionStandings from "../components/standings/DivisionStandings";
 import WildcardStandings from "../components/standings/WildcardStandings";
 import ConferenceStandings from "../components/standings/ConferenceStandings";
