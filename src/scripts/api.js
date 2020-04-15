@@ -11,8 +11,8 @@ let asyncFetch = async (url = "") => {
 };
 
 let teamSortByCity = function (a, b) {
-    const teamCity_a = a.shortName;
-    const teamCity_b = b.shortName;
+    const teamCity_a = a.teamData.shortName;
+    const teamCity_b = b.teamData.shortName;
 
     let comparison = 0;
     if (teamCity_a > teamCity_b) {

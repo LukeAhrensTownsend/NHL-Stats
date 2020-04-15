@@ -9,6 +9,8 @@
     "gh-pages-deploy": "node src/scripts/gh-pages-deploy.js"
   },
   "dependencies": {
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.11.0",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.4",
     "d3": "^5.15.1",
