@@ -6,7 +6,7 @@
       :key="conference.conferenceName"
       class="conference-container"
     >
-      <div class="conference-header">{{ conference.conferenceName }}</div>
+      <div class="conference-header ml-3">{{ conference.conferenceName }}</div>
       <div
         class="division-container"
         v-for="division in conference.divisionRecords"
@@ -15,7 +15,7 @@
         <div class="standings-table">
           <table>
             <tr class="table-head">
-              <th colspan="2">{{ division.divisionName }}</th>
+              <th class="pl-3" colspan="2">{{ division.divisionName }}</th>
               <th>GP</th>
               <th>W</th>
               <th>L</th>
@@ -33,7 +33,7 @@
               <th>STRK</th>
             </tr>
             <tr v-for="team in division.teamRecords" :key="team.team.name">
-              <td>{{ (team.wildCardRank === "0" ? team.divisionRank : team.wildCardRank) }}</td>
+              <td class="text-center">{{ (team.wildCardRank === "0" ? team.divisionRank : team.wildCardRank) }}</td>
               <td>{{ team.team.name }}</td>
               <td>{{ team.gamesPlayed }}</td>
               <td>{{ team.leagueRecord.wins }}</td>

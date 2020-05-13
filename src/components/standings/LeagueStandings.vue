@@ -4,7 +4,7 @@
     <div v-if="this.$props.standings.teamRecords" class="standings-table">
       <table>
         <tr class="table-head">
-          <th colspan="2">{{ this.$props.standings.leagueName }}</th>
+          <th class="pl-3" colspan="2">{{ this.$props.standings.leagueName }}</th>
           <th>GP</th>
           <th>W</th>
           <th>L</th>
@@ -22,7 +22,7 @@
           <th>STRK</th>
         </tr>
         <tr v-for="team in this.$props.standings.teamRecords" :key="team.team.name">
-          <td>{{ team.leagueRank }}</td>
+          <td class="text-center">{{ team.leagueRank }}</td>
           <td>{{ team.team.name }}</td>
           <td>{{ team.gamesPlayed }}</td>
           <td>{{ team.leagueRecord.wins }}</td>
@@ -62,4 +62,8 @@ export default {
 </script>
 
 <style scoped>
+.league-standings-container {
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+}
 </style>

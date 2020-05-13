@@ -9,7 +9,7 @@
       <div class="standings-table">
         <table>
           <tr class="table-head">
-            <th colspan="2">{{ conference.conferenceName }}</th>
+            <th class="pl-3" colspan="2">{{ conference.conferenceName }}</th>
             <th>GP</th>
             <th>W</th>
             <th>L</th>
@@ -27,7 +27,7 @@
             <th>STRK</th>
           </tr>
           <tr v-for="team in conference.teamRecords" :key="team.team.name">
-            <td>{{ team.conferenceRank }}</td>
+            <td class="text-center">{{ team.conferenceRank }}</td>
             <td>{{ team.team.name }}</td>
             <td>{{ team.gamesPlayed }}</td>
             <td>{{ team.leagueRecord.wins }}</td>

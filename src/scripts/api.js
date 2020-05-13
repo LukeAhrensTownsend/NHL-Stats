@@ -1,37 +1,13 @@
-let asyncFetch = async (url = "") => {
-    try {
-        const response = await fetch("https://statsapi.web.nhl.com/api/v1/" + url, {
-            method: "GET"
-        });
-
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-let teamSortByCity = function (a, b) {
-    const teamCity_a = a.teamData.shortName;
-    const teamCity_b = b.teamData.shortName;
-
-    let comparison = 0;
-    if (teamCity_a > teamCity_b) {
-        comparison = 1;
-    } else {
-        comparison = -1;
-    }
-
-    return comparison;
-}
+const HELPERS = require("./helpers");
 
 module.exports = {
     getSeasonData: async function () {
-        let data = await asyncFetch("seasons")
+        let data = await HELPERS.asyncFetch("seasons")
 
         return data;
     },
     getDivisionStandings: async function (season) {
-        let data = await asyncFetch(`standings/byDivision?expand=standings.record&season=${season}`);
+        let data = await HELPERS.asyncFetch(`standings/byDivision?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -63,7 +39,7 @@ module.exports = {
         }
     },
     getWildcardStandings: async function (season) {
-        let data = await asyncFetch(`standings/wildCardWithLeaders?expand=standings.record&season=${season}`);
+        let data = await HELPERS.asyncFetch(`standings/wildCardWithLeaders?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -103,7 +79,7 @@ module.exports = {
         }
     },
     getConferenceStandings: async function (season) {
-        let data = await asyncFetch(`standings/byConference?expand=standings.record&season=${season}`);
+        let data = await HELPERS.asyncFetch(`standings/byConference?expand=standings.record&season=${season}`);
 
         return {
             easternConferenceStandings: {
@@ -117,7 +93,7 @@ module.exports = {
         }
     },
     getLeagueStandings: async function (season) {
-        let data = await asyncFetch(`standings/byLeague?expand=standings.record&season=${season}`);
+        let data = await HELPERS.asyncFetch(`standings/byLeague?expand=standings.record&season=${season}`);
 
         return {
             leagueName: "NHL",
@@ -125,7 +101,7 @@ module.exports = {
         }
     },
     getTeams: async function () {
-        let data = await asyncFetch("teams");
+        let data = await HELPERS.asyncFetch("teams");
         let returnObject = {
             westernConference: {
                 conferenceName: "Western",
@@ -151,13 +127,13 @@ module.exports = {
             }
         }
 
-        returnObject.westernConference.teamRecords.sort(teamSortByCity);
-        returnObject.easternConference.teamRecords.sort(teamSortByCity);
+        returnObject.westernConference.teamRecords.sort(HELPERS.teamSortByCity);
+        returnObject.easternConference.teamRecords.sort(HELPERS.teamSortByCity);
 
         return returnObject;
     },
     getTeamData: async function (teamId) {
-        let data = await asyncFetch(`teams/${teamId}?expand=team.roster&expand=team.schedule.previous&expand=team.schedule.next&expand=team.stats`);
+        let data = await HELPERS.asyncFetch(`teams/${teamId}?expand=team.roster&expand=team.schedule.previous&expand=team.schedule.next&expand=team.stats`);
 
         return {
             id: data.teams[0].id,
@@ -183,12 +159,12 @@ module.exports = {
         }
     },
     getSeasonGamesByTeam: async function (teamId, season) {
-        let data = await asyncFetch(`schedule?teamId=${teamId}&season=${season}`);
+        let data = await HELPERS.asyncFetch(`schedule?teamId=${teamId}&season=${season}`);
 
         return data.dates;
     },
-    getPlayerData: async function(playerId) {
-        let data = await asyncFetch(`people/${playerId}`);
+    getPlayerData: async function (playerId) {
+        let data = await HELPERS.asyncFetch(`people/${playerId}`);
 
         return data;
     }

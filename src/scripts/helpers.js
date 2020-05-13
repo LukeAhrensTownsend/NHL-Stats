@@ -1,4 +1,35 @@
 module.exports = {
+    asyncFetch: async function (url = "") {
+        try {
+            const response = await fetch("https://statsapi.web.nhl.com/api/v1/" + url, {
+                method: "GET"
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getCurrentSeason: function() {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        return (month > 7 ? `${year}${year + 1}` : `${year - 1}${year}`);
+    },
+    teamSortByCity: function (a, b) {
+        const teamCity_a = a.teamData.shortName;
+        const teamCity_b = b.teamData.shortName;
+
+        let comparison = 0;
+        if (teamCity_a > teamCity_b) {
+            comparison = 1;
+        } else {
+            comparison = -1;
+        }
+
+        return comparison;
+    },
     getTeamColor: function (teamName) {
         switch (teamName) {
             case "Anaheim Ducks":

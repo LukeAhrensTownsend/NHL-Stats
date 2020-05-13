@@ -1,159 +1,90 @@
 <template>
-  <div class="team-general-container">
-    <div class="team-near-games">
-      <div
+  <b-container fluid>
+    <b-row class="mb-4">
+      <b-col
         class="team-near-game"
+        sm="12"
+        md="6"
         v-for="game in this.$props.selectedTeamData.teamData.nearGames"
         v-bind:key="game.header"
       >
-        <div class="team-near-game-header">{{game.header}}</div>
+        <h3 class="text-center my-4">{{game.header}}</h3>
         <div v-if="game.data">
-          <div
-            class="team-near-game-time"
-          >{{new Date(game.data.dates[0].games[0].gameDate).toDateString()}} - {{new Date(game.data.dates[0].games[0].gameDate).toLocaleTimeString()}}</div>
-          <div class="team-near-game-venue">{{game.data.dates[0].games[0].venue.name}}</div>
-          <div class="team-near-game-scoreboard">
-            <div class="team-near-game-scoreboard-team">
+          <div class="lead text-center mb-3">
+            {{new Date(game.data.dates[0].games[0].gameDate).toDateString()}} - {{new Date(game.data.dates[0].games[0].gameDate).toLocaleTimeString()}}
+            <br />
+            {{game.data.dates[0].games[0].venue.name}}
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <div class="text-center">
               <img
                 :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.away.team.id}.svg`)"
+                :style="{ height: '60px' }"
               />
-              <div
-                class="team-near-game-scoreboard-team-name"
-              >{{game.data.dates[0].games[0].teams.away.team.name}}</div>
+              <div>{{game.data.dates[0].games[0].teams.away.team.name}}</div>
             </div>
+
             <div
-              class="team-near-game-scoreboard-team-score"
-              v-show="game.header === 'Previous Game'"
-            >{{game.data.dates[0].games[0].teams.away.score}}</div>
-            <span>-</span>
-            <div
-              class="team-near-game-scoreboard-team-score"
-              v-show="game.header === 'Previous Game'"
-            >{{game.data.dates[0].games[0].teams.home.score}}</div>
-            <div class="team-near-game-scoreboard-team">
+              class="display-4 mx-2"
+            >{{game.data.dates[0].games[0].status.abstractGameState === "Final" ? `${game.data.dates[0].games[0].teams.away.score} - ${game.data.dates[0].games[0].teams.home.score}` : "vs"}}</div>
+
+            <div class="text-center">
               <img
                 :src="require(`@/assets/NHL/team_logos/${game.data.dates[0].games[0].teams.home.team.id}.svg`)"
+                :style="{ height: '60px' }"
               />
-              <div
-                class="team-near-game-scoreboard-team-name"
-              >{{game.data.dates[0].games[0].teams.home.team.name}}</div>
+              <div>{{game.data.dates[0].games[0].teams.home.team.name}}</div>
             </div>
           </div>
-          <div class="team-near-game-broadcasts">
-            TV:
+          <small class="d-flex my-4 justify-content-center">
+            <span class="mr-1">TV:</span>
             <div
-              class="team-near-game-broadcasts-tv"
               v-for="broadcast in game.data.dates[0].games[0].broadcasts"
               v-bind:key="broadcast.id"
+              class="mr-1"
             >{{`${broadcast.name}${(game.data.dates[0].games[0].broadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].broadcasts.length - 1)) ? ', ' : ''}`}}</div>
-            <span>&#183;</span>
-            Radio:
+
+            <span class="mx-2">&#183;</span>
+
+            <span class="mr-1">Radio:</span>
             <div
-              class="team-near-game-broadcasts-radio"
               v-for="broadcast in game.data.dates[0].games[0].radioBroadcasts"
               v-bind:key="broadcast.name"
+              class="mr-1"
             >{{`${broadcast.name} (${broadcast.type})${(game.data.dates[0].games[0].radioBroadcasts.indexOf(broadcast) !== (game.data.dates[0].games[0].radioBroadcasts.length - 1)) ? ', ' : ''}`}}</div>
-          </div>
+          </small>
         </div>
-        <div class="team-near-game-not-available" v-else>N/A</div>
-      </div>
-    </div>
-  </div>
+        <div class="lead text-center my-5" v-else>Undetermined</div>
+
+        <hr v-if="game.header === 'Previous Game'" class="d-md-none" />
+        <div v-if="game.header === 'Next Game'" class="vr d-none d-md-block"></div>
+      </b-col>
+    </b-row>
+    <Calendar :selectedTeamData="this.$props.selectedTeamData" />
+  </b-container>
 </template>
 
 <script>
+import Calendar from "../../components/teams/Calendar";
+
 export default {
   name: "TeamSchedule",
+  components: {
+    Calendar
+  },
   props: {
     selectedTeamData: Object
   }
 };
 </script>
 
-<style scoped>
-.team-near-games {
-  display: flex;
-}
-
-.team-near-games img {
-  height: 75px;
-}
-
-.team-near-game {
-  flex: 1;
-  padding: 0 2%;
-}
-
-.team-near-game:first-child {
-  border-right: 1px solid #eee;
-}
-
-.team-near-game-header {
-  font-size: 1.4em;
-  margin-bottom: 20px;
-}
-
-.team-near-game-time {
-  font-size: 0.8em;
-}
-
-.team-near-game-broadcasts {
-  font-size: 0.7em;
-  margin-top: 35px;
-}
-
-.team-near-game-broadcasts span {
-  margin: 0 10px;
-}
-
-.team-near-game-venue {
-  font-size: 0.9em;
-  margin-bottom: 10px;
-}
-
-.team-near-game-header,
-.team-near-game-time,
-.team-near-game-venue,
-.team-near-game-broadcasts {
-  text-align: center;
-}
-
-.team-near-game-broadcasts-tv,
-.team-near-game-broadcasts-radio {
-  display: inline;
-}
-
-.team-near-game-scoreboard {
-  display: flex;
-  justify-content: center;
-}
-
-.team-near-game-scoreboard span {
-  color: #222;
-  cursor: default;
-  font-weight: 1000;
-  font-size: 40px;
-  margin: 10px 4%;
-}
-
-.team-near-game-scoreboard-team {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
-.team-near-game-scoreboard-team-name {
-  font-size: 1em;
-  margin-top: 15px;
-}
-
-.team-near-game-scoreboard-team-score {
-  font-size: 3.5em;
-}
-
-.team-near-game-not-available {
-  font-size: 2em;
-  margin-top: 80px;
-  text-align: center;
+<style>
+.vr {
+  border-left: 1px solid #eee;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
 }
 </style>
