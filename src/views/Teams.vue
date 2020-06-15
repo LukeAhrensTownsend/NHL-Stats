@@ -1,6 +1,6 @@
 <template>
-  <b-container class="py-3" fluid>
-    <b-row cols="2">
+  <b-container class="px-0 px-md-2 py-3" fluid>
+    <b-row class="w-100" cols="2">
       <b-col
         align="center"
         v-for="conference in this.$props.teamList"
@@ -16,7 +16,11 @@
         />
       </b-col>
     </b-row>
-    <b-container v-if="Object.keys(this.selectedTeamData).length !== 0 && !isFetching" fluid>
+    <b-container
+      class="px-0 px-md-2"
+      v-if="Object.keys(this.selectedTeamData).length !== 0 && !isFetching"
+      fluid
+    >
       <div class="team-name-display display-4 text-center my-2">{{ selectedTeamData.teamData.name }}</div>
       <div class="lead text-center mb-4">{{ selectedTeamData.teamData.division }}</div>
       <b-nav tabs justified>
@@ -33,7 +37,7 @@
           v-on:click="$router.push('roster')"
         >Roster</b-nav-item>
       </b-nav>
-      <b-container class="team-content p-4" fluid>
+      <b-container class="team-content px-0 px-md-2 py-4" fluid>
         <TeamSchedule
           v-if="this.$route.params.teamStatsCategory === 'schedule'"
           :selectedTeamData="selectedTeamData"

@@ -21,34 +21,35 @@
         v-on:click="$router.push('league')"
       >League</b-nav-item>
     </b-nav>
-      <b-row class="mx-auto px-3 py-4 justify-content-between">
-          <h3 class="standings-header display-4">{{ this.standingsHeader }}</h3>
-          <SeasonSelect />
-      </b-row>
+    <b-row class="mx-auto px-4 my-4 justify-content-between">
+      <h3 class="standings-header display-4">{{ this.standingsHeader }}</h3>
+      <SeasonSelect />
+    </b-row>
 
-        <DivisionStandings
-          :standings="this.standings.divisionStandings"
-          v-if="this.$route.params.standingsCategory === 'division'"
-        />
-        <WildcardStandings
-          :standings="this.standings.wildcardStandings"
-          v-if="this.$route.params.standingsCategory === 'wildcard'"
-        />
-        <ConferenceStandings
-          :standings="this.standings.conferenceStandings"
-          v-if="this.$route.params.standingsCategory === 'conference'"
-        />
-        <LeagueStandings
-          :standings="this.standings.leagueStandings"
-          v-if="this.$route.params.standingsCategory === 'league'"
-        />
+    <DivisionStandings
+      :standingsItems="this.standingsItems.divisionStandings"
+      v-if="this.$route.params.standingsCategory === 'division'"
+    />
+    <WildCardStandings
+      :standingsItems="this.standingsItems.wildCardStandings"
+      v-if="this.$route.params.standingsCategory === 'wildcard'"
+    />
+    <ConferenceStandings
+      :standingsItems="this.standingsItems.conferenceStandings"
+      v-if="this.$route.params.standingsCategory === 'conference'"
+    />
+    <LeagueStandings
+      :standingsItems="this.standingsItems.leagueStandings"
+      v-if="this.$route.params.standingsCategory === 'league'"
+    />
   </b-container>
 </template>
 
 <script>
 import API from "../scripts/api";
+import HELPERS from "../scripts/helpers";
 import DivisionStandings from "../components/standings/DivisionStandings";
-import WildcardStandings from "../components/standings/WildcardStandings";
+import WildCardStandings from "../components/standings/WildCardStandings";
 import ConferenceStandings from "../components/standings/ConferenceStandings";
 import LeagueStandings from "../components/standings/LeagueStandings";
 import SeasonSelect from "../components/SeasonSelect";
@@ -65,9 +66,12 @@ export default {
     return {
       standings: {
         divisionStandings: {},
-        wildcardStandings: {},
+        wildCardStandings: {},
         conferenceStandings: {},
-        leagueStandings: {}
+        leagueStandings: {
+          leagueName: "NHL",
+          teamRecords: []
+        }
       },
       divisionsInUse: true,
       wildCardInUse: true,
@@ -76,7 +80,7 @@ export default {
   },
   components: {
     DivisionStandings,
-    WildcardStandings,
+    WildCardStandings,
     ConferenceStandings,
     LeagueStandings,
     SeasonSelect
@@ -87,12 +91,14 @@ export default {
         await API.getSeasonData().then(seasonData => {
           let season =
             seasonData.seasons[
-              parseInt(this.$route.params.standingsSeason.substring(0, 4)) -
-                1918
+              parseInt(this.$route.params.standingsSeason.substring(4)) - 1918
             ];
 
           this.divisionsInUse = season.divisionsInUse;
-          this.wildCardInUse = season.wildCardInUse;
+          this.wildCardInUse =
+            this.$route.params.standingsSeason.substring(4) === "2013"
+              ? false
+              : season.wildCardInUse;
           this.conferencesInUse = season.conferencesInUse;
         });
 
@@ -101,14 +107,14 @@ export default {
             this.$route.params.standingsSeason
           );
         if (this.wildCardInUse)
-          this.standings.wildcardStandings = await API.getWildcardStandings(
+          this.standings.wildCardStandings = await API.getWildcardStandings(
             this.$route.params.standingsSeason
           );
         if (this.conferencesInUse)
           this.standings.conferenceStandings = await API.getConferenceStandings(
             this.$route.params.standingsSeason
           );
-        this.standings.leagueStandings = await API.getLeagueStandings(
+        this.standings.leagueStandings.teamRecords = await API.getLeagueStandings(
           this.$route.params.standingsSeason
         );
       } catch (err) {
@@ -147,27 +153,19 @@ export default {
   },
   computed: {
     standingsHeader: function() {
-      let temp = "";
-
-      switch (this.$route.params.standingsCategory) {
-        case "division":
-          temp = "Division";
-          break;
-        case "wildcard":
-          temp = "Wild Card";
-          break;
-        case "conference":
-          temp = "Conference";
-          break;
-        case "league":
-          temp = "League";
-          break;
-      }
-
-      return `${temp} Standings (${this.$route.params.standingsSeason.substring(
+      return `${this.$route.params.standingsCategory.charAt(0).toUpperCase() +
+        this.$route.params.standingsCategory.slice(
+          1
+        )} Standings (${this.$route.params.standingsSeason.substring(
         0,
         4
       )}-${this.$route.params.standingsSeason.substring(4)})`;
+    },
+    standingsItems: function() {
+      return HELPERS.generateStandingsItems(
+        this.standings,
+        this.$route.params.standingsSeason
+      );
     }
   },
   async created() {
@@ -177,65 +175,15 @@ export default {
 </script>
 
 <style>
+.custom-table {
+  font-size: calc(10px + 0.3vw);
+}
+
 .standings-header {
-  font-size: calc(20px + 0.75vw);
+  font-size: calc(20px + 0.5vw);
 }
 
-.conference-header {
-  font-size: 1.3em;
-  margin-bottom: 10px;
-}
-
-.conference-container {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 25px;
-}
-
-.division-container {
-  border-top: 1px solid #eee;
-}
-
-.conference-container:last-child, .division-container:last-child {
-  margin-bottom: 0;
-}
-
-.standings-table {
-  font-size: 0.8em;
-  overflow-x: auto;
-  width: 100%;
-}
-
-.standings-table table {
-  border-collapse: collapse;
-  min-width: 500px;
-  width: 100%;
-}
-
-.standings-table tr {
-  border-bottom: 1px solid #eee;
-}
-
-.standings-table tr:hover {
-  background-color: rgb(250, 250, 250);
-  cursor: default;
-}
-
-.standings-table tr:last-child {
-  border-bottom: none;
-}
-
-.standings-table th,
-.standings-table td {
-  text-align: left;
-  padding: 12px 8px;
-}
-
-.standings-table th {
-  background-color: rgb(245, 245, 245);
-  font-weight: 600;
-}
-
-.standings-table th:first-child {
-  width: 20%;
+td {
+  white-space: pre;
 }
 </style>

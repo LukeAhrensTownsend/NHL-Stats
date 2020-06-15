@@ -19,7 +19,6 @@
       <option value="20072008">2007-2008</option>
       <option value="20062007">2006-2007</option>
       <option value="20052006">2005-2006</option>
-      <option value="20042005">2004-2005</option>
       <option value="20032004">2003-2004</option>
       <option value="20022003">2002-2003</option>
       <option value="20012002">2001-2002</option>
@@ -106,6 +105,7 @@
       <option value="19201921">1920-1921</option>
       <option value="19191920">1919-1920</option>
       <option value="19181919">1918-1919</option>
+      <option value="19171918">1917-1918</option>
     </b-form-select>
 </template>
 

@@ -1,69 +1,44 @@
 <template>
-  <div class="league-standings-container">
+  <b-container class="px-0" fluid>
     <p class="error" v-if="error">{{ error }}</p>
-    <div v-if="this.$props.standings.teamRecords" class="standings-table">
-      <table>
-        <tr class="table-head">
-          <th class="pl-3" colspan="2">{{ this.$props.standings.leagueName }}</th>
-          <th>GP</th>
-          <th>W</th>
-          <th>L</th>
-          <th v-show="this.$props.standings.teamRecords[0].leagueRecord.ties">T</th>
-          <th v-show="$route.params.standingsSeason.substring(4) > 1999">OT</th>
-          <th>PTS</th>
-          <th v-show="this.$props.standings.teamRecords[0].row">ROW</th>
-          <th>GF</th>
-          <th>GA</th>
-          <th>DIFF</th>
-          <th>HOME</th>
-          <th>AWAY</th>
-          <th v-show="$route.params.standingsSeason.substring(4) > 1999">S/O</th>
-          <th>L10</th>
-          <th>STRK</th>
-        </tr>
-        <tr v-for="team in this.$props.standings.teamRecords" :key="team.team.name">
-          <td class="text-center">{{ team.leagueRank }}</td>
-          <td>{{ team.team.name }}</td>
-          <td>{{ team.gamesPlayed }}</td>
-          <td>{{ team.leagueRecord.wins }}</td>
-          <td>{{ team.leagueRecord.losses }}</td>
-          <td v-show="team.leagueRecord.ties">{{ team.leagueRecord.ties }}</td>
-          <td v-show="$route.params.standingsSeason.substring(4) > 1999">{{ team.leagueRecord.ot }}</td>
-          <td>{{ team.points }}</td>
-          <td v-show="team.row">{{ team.row }}</td>
-          <td>{{ team.goalsScored }}</td>
-          <td>{{ team.goalsAgainst }}</td>
-          <td>{{ team.goalsScored > team.goalsAgainst ? "+" : "" }}{{ (team.goalsScored - team.goalsAgainst) }}</td>
-          <td>{{ team.records.overallRecords[0].wins }}-{{ team.records.overallRecords[0].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[0].ot}` : ''}}</td>
-          <td>{{ team.records.overallRecords[1].wins}}-{{ team.records.overallRecords[1].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[1].ot}` : ''}}</td>
-          <td
-            v-show="$route.params.standingsSeason.substring(4) > 1999"
-          >{{ team.records.overallRecords[2].wins }}-{{ team.records.overallRecords[2].losses }}</td>
-          <td>{{ team.records.overallRecords[3].wins }}-{{ team.records.overallRecords[3].losses }}{{ (team.records.overallRecords[0].ot !== undefined && $route.params.standingsSeason.substring(4) > 1999) ? `-${team.records.overallRecords[3].ot}` : ''}}</td>
-          <td>{{ team.streak.streakCode }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
+    <b-table
+      v-if="$props.standingsItems"
+      :items="$props.standingsItems"
+      :fields="standingsFields"
+      head-variant="light"
+      class="custom-table mb-0"
+      responsive
+      fixed
+      outlined
+      hover
+    ></b-table>
+  </b-container>
 </template>
 
 <script>
+import HELPERS from "../../scripts/helpers";
+
 export default {
   name: "LeagueStandings",
   props: {
-    standings: Object
+    standingsItems: Array
   },
   data() {
     return {
       error: ""
     };
+  },
+  computed: {
+    standingsFields: function() {
+      return HELPERS.generateStandingsFields(
+        this.$props.standingsItems,
+        this.$route.params.standingsSeason,
+        "league"
+      );
+    }
   }
 };
 </script>
 
 <style scoped>
-.league-standings-container {
-  border-bottom: 1px solid #eee;
-  border-top: 1px solid #eee;
-}
 </style>

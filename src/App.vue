@@ -54,4 +54,37 @@ body,
 #navbar .active {
   border-bottom: 5px solid #007cb2;
 }
+
+.custom-table {
+  font-size: 0.8em;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.custom-table table {
+  border-collapse: collapse;
+  min-width: 500px;
+  width: 100%;
+}
+
+.custom-table tr {
+  background-color: white;
+  border-bottom: 1px solid #eee;
+}
+
+.custom-table tr:hover {
+  background-color: rgb(250, 250, 250);
+  cursor: default;
+}
+
+.custom-table th,
+.custom-table td {
+  text-align: left;
+  padding: 12px 8px;
+}
+
+.custom-table th {
+  background-color: rgb(245, 245, 245);
+  font-weight: 600;
+}
 </style>

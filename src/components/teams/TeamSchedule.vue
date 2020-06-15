@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row class="mb-4">
       <b-col
-        class="team-near-game"
+        class="team-near-game px-0 px-md-1"
         sm="12"
         md="6"
         v-for="game in this.$props.selectedTeamData.teamData.nearGames"
@@ -61,7 +61,7 @@
         <div v-if="game.header === 'Next Game'" class="vr d-none d-md-block"></div>
       </b-col>
     </b-row>
-    <Calendar :selectedTeamData="this.$props.selectedTeamData" />
+    <Calendar class="w-100" :selectedTeamData="this.$props.selectedTeamData" />
   </b-container>
 </template>
 
