@@ -44,7 +44,7 @@ module.exports = {
 
 		return temp;
 	},
-	getWildcardStandings: async function(season) {
+	getWildCardStandings: async function(season) {
 		let data = await HELPERS.asyncFetch(
 			`standings/wildCardWithLeaders?expand=standings.record&season=${season}`
 		);

@@ -107,7 +107,7 @@ export default {
             this.$route.params.standingsSeason
           );
         if (this.wildCardInUse)
-          this.standings.wildCardStandings = await API.getWildcardStandings(
+          this.standings.wildCardStandings = await API.getWildCardStandings(
             this.$route.params.standingsSeason
           );
         if (this.conferencesInUse)
