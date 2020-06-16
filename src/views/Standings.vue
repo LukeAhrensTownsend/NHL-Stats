@@ -89,9 +89,13 @@ export default {
     fetchSeasonStandings: async function() {
       try {
         await API.getSeasonData().then(seasonData => {
-          let season =
+          let season = (parseInt(this.$route.params.standingsSeason.substring(0, 4)) < 2005) ? 
             seasonData.seasons[
-              parseInt(this.$route.params.standingsSeason.substring(4)) - 1918
+              parseInt(this.$route.params.standingsSeason.substring(0, 4)) - 1917
+            ]
+            :
+            seasonData.seasons[
+              parseInt(this.$route.params.standingsSeason.substring(0, 4)) - 1918
             ];
 
           this.divisionsInUse = season.divisionsInUse;
