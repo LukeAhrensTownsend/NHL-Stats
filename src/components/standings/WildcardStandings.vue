@@ -7,7 +7,7 @@
         class="division-container"
         v-for="division in conference.divisions"
         :key="division.divisionName"
-      >
+      > 
         <b-table
           :items="division.teamRecords"
           :fields="standingsFields"
