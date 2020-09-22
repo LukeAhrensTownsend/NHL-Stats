@@ -355,7 +355,7 @@ module.exports = {
 			),
 		};
 	},
-	generateStandingsFields: function(standings, season, standingsType) {
+	generateStandingsFields: function(season, standingsType) {
 		return [
 			// {
 			// 	key: `${standingsType}Rank`,
@@ -494,6 +494,115 @@ module.exports = {
 				label: "STRK",
 				thStyle: { width: "65px" },
 				class: "text-center",
+			},
+		];
+	},
+	generateRosterItems: function(roster, season) {
+		
+	},
+	generateRosterFields: function(season) {
+		return [
+			{
+				key: "jerseyNumber",
+				sortable: true,
+				sortDirection: "desc",
+				label: "#",
+				thStyle: {
+					width: "65px",
+				},
+				thClass: "text-center",
+				tdClass: "text-center pr-3",
+			},
+			{
+				key: "playerName",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Name",
+				thStyle: {
+					width: "225px",
+					backgroundColor: "#e9ecef",
+				},
+				thClass: "pl-4",
+				stickyColumn: true,
+			},
+			{
+				key: "playerAge",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Age",
+				thStyle: { width: "65px" },
+				thClass: "text-center",
+				tdClass: "text-center pr-3",
+			},
+			{
+				key: "playerBirthDate",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Birth Date",
+				thStyle: {
+					width: "225px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerBirthLocation",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Birth Location",
+				thStyle: {
+					width: "225px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerNationality",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Nationality",
+				thStyle: {
+					width: "150px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerHeight",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Height",
+				thStyle: {
+					width: "100px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerWeight",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Weight",
+				thStyle: {
+					width: "100px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerShootDirection",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Shoots",
+				thStyle: {
+					width: "100px",
+				},
+				thClass: "pl-4",
+			},
+			{
+				key: "playerPosition",
+				sortable: true,
+				sortDirection: "desc",
+				label: "Position",
+				thStyle: {
+					width: "150px",
+				},
+				thClass: "pl-4",
 			},
 		];
 	},
