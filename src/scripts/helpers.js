@@ -497,10 +497,10 @@ module.exports = {
 			},
 		];
 	},
-	generateRosterItems: function(roster, season) {
+	// generateRosterItems: function(roster, season) {
 		
-	},
-	generateRosterFields: function(season) {
+	// },
+	generateRosterFields: function() {
 		return [
 			{
 				key: "jerseyNumber",

@@ -52,7 +52,9 @@
         />
       </b-container>
     </b-container>
-    <div v-if="isFetching" class="lead text-center my-5">Gathering team data...</div>
+    <div v-if="isFetching" class="lead text-center my-5">
+      <b-spinner class="mr-2" label="Gathering team data..."></b-spinner>Gathering team data...
+    </div>
   </b-container>
 </template>
 

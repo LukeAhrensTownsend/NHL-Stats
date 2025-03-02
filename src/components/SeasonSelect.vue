@@ -4,6 +4,7 @@
       @change="$router.push({ params: { standingsSeason: selected } })"
       size="sm"
     >
+      <option value="20202021">2020-2021</option>
       <option value="20192020">2019-2020</option>
       <option value="20182019">2018-2019</option>
       <option value="20172018">2017-2018</option>
